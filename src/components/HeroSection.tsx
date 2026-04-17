@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Download, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import avatarImg from "@/assets/avatar.png";
 
 const HeroSection = () => {
   return (

@@ -1,9 +1,31 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Github, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { projects } from "@/data/projects";
 
+const PAGE_SIZE = 5;
+
 const PortfolioSection = () => {
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE));
+  const start = (page - 1) * PAGE_SIZE;
+  const visibleProjects = projects.slice(start, start + PAGE_SIZE);
+
+  const goTo = (p: number) => {
+    const next = Math.min(Math.max(1, p), totalPages);
+    setPage(next);
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section id="projects" className="py-24 px-4">
       <div className="container max-w-3xl">
@@ -17,7 +39,7 @@ const PortfolioSection = () => {
         </motion.h2>
 
         <div className="grid gap-5">
-          {projects.map((project, i) => {
+          {visibleProjects.map((project, i) => {
             const isGitHub = project.link.includes("github.com");
 
             return (
@@ -71,6 +93,51 @@ const PortfolioSection = () => {
             );
           })}
         </div>
+
+        {totalPages > 1 && (
+          <Pagination className="mt-10">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#projects"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(page - 1);
+                  }}
+                  className={page === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+              {Array.from({ length: totalPages }).map((_, idx) => {
+                const p = idx + 1;
+                return (
+                  <PaginationItem key={p}>
+                    <PaginationLink
+                      href="#projects"
+                      isActive={p === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        goTo(p);
+                      }}
+                      className="cursor-pointer"
+                    >
+                      {p}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  href="#projects"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(page + 1);
+                  }}
+                  className={page === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </section>
   );

@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { projects } from "@/data/projects";
 
 const PortfolioSection = () => {
   return (
-    <section className="py-24 px-4">
+    <section id="projects" className="py-24 px-4">
       <div className="container max-w-3xl">
         <motion.h2
           initial={{ opacity: 0 }}
@@ -33,7 +33,7 @@ const PortfolioSection = () => {
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{project.description}</p>
                 <p className="font-mono text-xs text-primary/70 mb-5">{project.tech}</p>
 
-                <div className="flex gap-3">
+                <div className="flex flex-wrap gap-3">
                   {project.link2 ? (
                     <>
                       <Button size="sm" variant="secondary" className="gap-2 text-xs" asChild>
@@ -53,7 +53,16 @@ const PortfolioSection = () => {
                     <Button size="sm" variant="secondary" className="gap-2 text-xs" asChild>
                       <a href={project.link} target="_blank" rel="noopener noreferrer">
                         {isGitHub ? <Github className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
-                        {isGitHub ? "GitHub" : "View Project"}
+                        {isGitHub ? "View Project" : "View Project"}
+                      </a>
+                    </Button>
+                  )}
+
+                  {project.demo && (
+                    <Button size="sm" className="gap-2 text-xs" asChild>
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                        <Globe className="w-3.5 h-3.5" />
+                        Live Demo
                       </a>
                     </Button>
                   )}

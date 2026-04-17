@@ -5,75 +5,83 @@ import avatarImg from "@/assets/avatar.png";
 
 const HeroSection = () => {
   return (
-    <section className="min-h-[90vh] flex items-center justify-center px-4">
-      <div className="container max-w-3xl text-center">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8"
-        >
-          <div className="relative inline-block">
-            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden ring-4 ring-primary/20 ring-offset-4 ring-offset-background shadow-2xl">
-              <img
-                src={avatarImg}
-                alt="Faridlan - Backend Developer"
-                width={160}
-                height={160}
-                className="w-full h-full object-cover"
-              />
+    <section className="min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="container max-w-5xl">
+        <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12 lg:gap-16">
+          {/* Avatar - Left Side */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, x: -20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="shrink-0"
+          >
+            <div className="relative">
+              <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 rounded-2xl overflow-hidden shadow-2xl ring-1 ring-border">
+                <img
+                  src={avatarImg}
+                  alt="Faridlan - Backend Developer"
+                  width={208}
+                  height={208}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              {/* Status indicator */}
+              <div className="absolute -bottom-2 -right-2 flex items-center gap-2 bg-card/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-border shadow-lg">
+                <span className="w-2 h-2 rounded-full bg-[hsl(var(--success))] animate-pulse" />
+                <span className="text-xs font-medium text-foreground">Available for work</span>
+              </div>
             </div>
-            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[hsl(var(--success))] rounded-full border-4 border-background flex items-center justify-center">
-              <span className="sr-only">Available for work</span>
-            </div>
+          </motion.div>
+
+          {/* Content - Right Side */}
+          <div className="flex-1 text-center md:text-left">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="font-mono text-sm text-primary mb-3 tracking-widest uppercase"
+            >
+              Hello, I'm Faridlan
+            </motion.p>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4"
+            >
+              Backend{" "}
+              <span className="text-gradient">Developer</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-muted-foreground text-base sm:text-lg max-w-lg mx-auto md:mx-0 mb-8 leading-relaxed"
+            >
+              Passionate about building scalable, maintainable systems with Clean Architecture & DRY principles. Always learning new technologies to craft better solutions.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start"
+            >
+              <Button size="lg" className="gap-2 font-medium">
+                <Download className="w-4 h-4" />
+                Download CV
+              </Button>
+              <Button size="lg" variant="outline" className="gap-2 font-medium" asChild>
+                <a href="#contact">
+                  <Mail className="w-4 h-4" />
+                  Contact Me
+                </a>
+              </Button>
+            </motion.div>
           </div>
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="font-mono text-sm text-primary mb-4 tracking-widest uppercase"
-        >
-          Hello, I'm Faridlan
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-5xl sm:text-7xl font-bold tracking-tight mb-6"
-        >
-          Backend{" "}
-          <span className="text-gradient">Developer</span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="text-muted-foreground text-lg sm:text-xl max-w-xl mx-auto mb-10 leading-relaxed"
-        >
-          Passionate about building scalable, maintainable systems with Clean Architecture &amp; DRY principles. Always learning new technologies to craft better solutions.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <Button size="lg" className="gap-2 font-medium">
-            <Download className="w-4 h-4" />
-            Download CV
-          </Button>
-          <Button size="lg" variant="outline" className="gap-2 font-medium" asChild>
-            <a href="#contact">
-              <Mail className="w-4 h-4" />
-              Contact Me
-            </a>
-          </Button>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

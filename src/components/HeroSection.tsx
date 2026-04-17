@@ -23,7 +23,7 @@ const HeroSection = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 rounded-full border-4 border-background flex items-center justify-center">
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[hsl(var(--success))] rounded-full border-4 border-background flex items-center justify-center">
               <span className="sr-only">Available for work</span>
             </div>
           </div>

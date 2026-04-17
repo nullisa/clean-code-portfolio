@@ -1,11 +1,34 @@
 import { motion } from "framer-motion";
 import { Download, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import avatarImg from "@/assets/avatar.png";
 
 const HeroSection = () => {
   return (
     <section className="min-h-[90vh] flex items-center justify-center px-4">
       <div className="container max-w-3xl text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <div className="relative inline-block">
+            <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden ring-4 ring-primary/20 ring-offset-4 ring-offset-background shadow-2xl">
+              <img
+                src={avatarImg}
+                alt="Faridlan - Backend Developer"
+                width={160}
+                height={160}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-[hsl(var(--success))] rounded-full border-4 border-background flex items-center justify-center">
+              <span className="sr-only">Available for work</span>
+            </div>
+          </div>
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

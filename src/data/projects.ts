@@ -4,6 +4,7 @@ export interface Project {
   tech: string;
   link: string;
   link2?: string;
+  demo?: string;
 }
 
 export const projects: Project[] = [
@@ -32,11 +33,13 @@ export const projects: Project[] = [
     description: "Designed a relational database schema in Supabase that handles identity management and real-time data synchronization.",
     tech: "Supabase · React (TS) · Lovable UI",
     link: "https://wift.faridlan.com",
+    demo: "https://wift.faridlan.com",
   },
   {
     title: "Wijaya Family — Conversion-Optimized Landing Page",
     description: "Integrated Meta Pixel events to monitor Leads and Page Views, allowing the marketing team to optimize ad spend based on real-time data captured in Supabase.",
     tech: "Supabase · React (TS) · Lovable UI",
     link: "https://wijaya.faridlan.com",
+    demo: "https://wijaya.faridlan.com",
   },
 ];

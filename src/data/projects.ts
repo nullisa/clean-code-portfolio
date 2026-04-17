@@ -42,4 +42,36 @@ export const projects: Project[] = [
     link: "https://wijaya.faridlan.com",
     demo: "https://wijaya.faridlan.com",
   },
+  {
+    title: "Inventory Management Service",
+    description: "A microservice handling product stock, warehouse transfers, and low-stock alerts with event-driven architecture.",
+    tech: "Go · gRPC · PostgreSQL · RabbitMQ",
+    link: "https://github.com/faridlan/inventory-service",
+  },
+  {
+    title: "Auth & Identity Provider",
+    description: "OAuth2 + JWT authentication service with role-based access control, refresh tokens, and email verification flow.",
+    tech: "NestJS · Redis · PostgreSQL",
+    link: "https://github.com/faridlan/auth-provider",
+  },
+  {
+    title: "Realtime Chat Backend",
+    description: "WebSocket-based chat backend supporting rooms, presence, and message persistence with horizontal scaling.",
+    tech: "Node.js · Socket.IO · MongoDB",
+    link: "https://github.com/faridlan/realtime-chat",
+    demo: "https://chat-demo.faridlan.com",
+  },
+  {
+    title: "Payment Gateway Integration",
+    description: "Unified payment abstraction layer integrating Midtrans, Stripe, and Xendit with idempotent webhook handling.",
+    tech: "NestJS · PostgreSQL · Prisma",
+    link: "https://github.com/faridlan/payment-gateway",
+  },
+  {
+    title: "URL Shortener Service",
+    description: "High-throughput URL shortener with click analytics, custom aliases, and rate limiting per API key.",
+    tech: "Go · Redis · PostgreSQL",
+    link: "https://github.com/faridlan/url-shortener",
+    demo: "https://s.faridlan.com",
+  },
 ];

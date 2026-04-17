@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, Mail } from "lucide-react";
+import { Download, Mail, FolderGit2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import avatarImg from "@/assets/avatar.png";
 
@@ -77,6 +77,12 @@ const HeroSection = () => {
                 <a href="#contact">
                   <Mail className="w-4 h-4" />
                   Contact Me
+                </a>
+              </Button>
+              <Button size="lg" variant="secondary" className="gap-2 font-medium" asChild>
+                <a href="#projects">
+                  <FolderGit2 className="w-4 h-4" />
+                  View Projects
                 </a>
               </Button>
             </motion.div>

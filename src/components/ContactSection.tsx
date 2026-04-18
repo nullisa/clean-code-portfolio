@@ -1,9 +1,19 @@
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, MapPin } from "lucide-react";
+import { Mail, Github, Linkedin, MapPin, Twitter, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useContactInfo } from "@/hooks/usePortfolioData";
 
 const ContactSection = () => {
-  const email = "hello@faridlan.com";
+  const { data: contact } = useContactInfo();
+  const email = contact?.email || "hello@faridlan.com";
+  const location = contact?.location || "Indonesia";
+
+  const socials = [
+    { url: contact?.github_url, label: "GitHub", Icon: Github },
+    { url: contact?.linkedin_url, label: "LinkedIn", Icon: Linkedin },
+    { url: contact?.twitter_url, label: "Twitter", Icon: Twitter },
+    { url: contact?.website_url, label: "Website", Icon: Globe },
+  ].filter((s) => s.url);
 
   return (
     <section id="contact" className="py-24 px-4">
@@ -65,7 +75,7 @@ const ContactSection = () => {
               </span>
               <div>
                 <p className="text-xs font-mono text-muted-foreground uppercase tracking-wider">Location</p>
-                <p className="text-sm font-medium">Indonesia · Open to Remote</p>
+                <p className="text-sm font-medium">{location}</p>
               </div>
             </div>
           </div>
@@ -77,18 +87,14 @@ const ContactSection = () => {
                 Send Email
               </a>
             </Button>
-            <Button size="lg" variant="outline" className="gap-2" asChild>
-              <a href="https://github.com/faridlan" target="_blank" rel="noopener noreferrer">
-                <Github className="w-4 h-4" />
-                GitHub
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" className="gap-2" asChild>
-              <a href="https://linkedin.com/in/faridlan" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="w-4 h-4" />
-                LinkedIn
-              </a>
-            </Button>
+            {socials.map(({ url, label, Icon }) => (
+              <Button key={label} size="lg" variant="outline" className="gap-2" asChild>
+                <a href={url!} target="_blank" rel="noopener noreferrer">
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </a>
+              </Button>
+            ))}
           </div>
         </motion.div>
       </div>

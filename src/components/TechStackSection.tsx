@@ -1,16 +1,9 @@
 import { motion } from "framer-motion";
-
-const techs = [
-  "TypeScript",
-  "NestJS",
-  "Golang",
-  "Supabase",
-  "PostgreSQL",
-  "Prisma",
-  "React",
-];
+import { useTechStack } from "@/hooks/usePortfolioData";
 
 const TechStackSection = () => {
+  const { data: techs = [] } = useTechStack();
+
   return (
     <section className="py-24 px-4">
       <div className="container max-w-3xl">
@@ -32,10 +25,10 @@ const TechStackSection = () => {
         >
           {techs.map((tech) => (
             <span
-              key={tech}
+              key={tech.id}
               className="px-4 py-2 rounded-md bg-secondary text-secondary-foreground text-sm font-mono border border-border hover:border-primary/40 transition-colors"
             >
-              {tech}
+              {tech.name}
             </span>
           ))}
         </motion.div>

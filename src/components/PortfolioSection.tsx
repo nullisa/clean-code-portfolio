@@ -10,11 +10,12 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { projects } from "@/data/projects";
+import { useProjects } from "@/hooks/usePortfolioData";
 
 const PAGE_SIZE = 5;
 
 const PortfolioSection = () => {
+  const { data: projects = [] } = useProjects();
   const [page, setPage] = useState(1);
   const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
@@ -44,13 +45,16 @@ const PortfolioSection = () => {
 
             return (
               <motion.div
-                key={project.title}
+                key={project.id}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.08 }}
                 className="rounded-lg bg-card p-6 card-glow"
               >
+                {project.image_url && (
+                  <img src={project.image_url} alt={project.title} className="w-full h-40 object-cover rounded-md mb-4 border border-border" />
+                )}
                 <h3 className="text-lg font-semibold text-foreground mb-2">{project.title}</h3>
                 <p className="text-muted-foreground text-sm mb-4 leading-relaxed">{project.description}</p>
                 <p className="font-mono text-xs text-primary/70 mb-5">{project.tech}</p>
@@ -72,12 +76,14 @@ const PortfolioSection = () => {
                       </Button>
                     </>
                   ) : (
-                    <Button size="sm" variant="secondary" className="gap-2 text-xs" asChild>
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        {isGitHub ? <Github className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
-                        {isGitHub ? "View Project" : "View Project"}
-                      </a>
-                    </Button>
+                    project.link && (
+                      <Button size="sm" variant="secondary" className="gap-2 text-xs" asChild>
+                        <a href={project.link} target="_blank" rel="noopener noreferrer">
+                          {isGitHub ? <Github className="w-3.5 h-3.5" /> : <ExternalLink className="w-3.5 h-3.5" />}
+                          View Project
+                        </a>
+                      </Button>
+                    )
                   )}
 
                   {project.demo && (

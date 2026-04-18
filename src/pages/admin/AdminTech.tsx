@@ -38,7 +38,8 @@ const AdminTech = () => {
   };
 
   const handleUpdate = async (id: string, field: "name" | "category", value: string) => {
-    const { error } = await supabase.from("tech_stack").update({ [field]: value }).eq("id", id);
+    const payload = field === "name" ? { name: value } : { category: value };
+    const { error } = await supabase.from("tech_stack").update(payload).eq("id", id);
     if (error) toast.error(error.message);
     else refresh();
   };

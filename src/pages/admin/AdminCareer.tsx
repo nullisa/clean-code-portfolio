@@ -42,7 +42,7 @@ const AdminCareer = () => {
     toast.success("Entry added.");
   };
 
-  const handleSave = async (entry: Entry) => {
+  const handleSave = async (entry: Entry): Promise<void> => {
     const { error } = await supabase
       .from("career_timeline")
       .update({
@@ -53,7 +53,10 @@ const AdminCareer = () => {
         is_highlight: entry.is_highlight,
       })
       .eq("id", entry.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success("Saved.");
     refresh();
   };

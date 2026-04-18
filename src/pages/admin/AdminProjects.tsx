@@ -49,7 +49,7 @@ const AdminProjects = () => {
     toast.success("Project added.");
   };
 
-  const handleSave = async (p: Project) => {
+  const handleSave = async (p: Project): Promise<void> => {
     const { error } = await supabase
       .from("projects")
       .update({
@@ -62,7 +62,10 @@ const AdminProjects = () => {
         image_url: p.image_url,
       })
       .eq("id", p.id);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     refresh();
     toast.success("Saved.");
   };

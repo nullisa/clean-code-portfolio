@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import PageHeader from "@/components/admin/PageHeader";
+import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
 import {
   Dialog,
   DialogContent,
@@ -130,9 +131,13 @@ const AdminTech = () => {
                       maxLength={30}
                       className="w-24 sm:w-32 h-9 border-0 bg-transparent focus-visible:bg-secondary/40 px-2 text-xs text-muted-foreground"
                     />
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(tech.id)} className="text-destructive shrink-0 h-9 w-9">
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                    <ConfirmDeleteButton
+                      onConfirm={() => handleDelete(tech.id)}
+                      itemLabel={`“${tech.name}”`}
+                      title="Remove technology?"
+                      size="icon"
+                      className="text-destructive shrink-0 h-9 w-9"
+                    />
                   </div>
                 ))}
               </div>

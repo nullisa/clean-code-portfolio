@@ -5,8 +5,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PageHeader from "@/components/admin/PageHeader";
 import { toast } from "sonner";
-import { Loader2, Save } from "lucide-react";
+import { Loader2, Save, Mail, MapPin, Github, Linkedin, Twitter, Globe } from "lucide-react";
+
+const fields = [
+  { key: "email", label: "Email", icon: Mail, type: "email", placeholder: "you@example.com" },
+  { key: "location", label: "Location", icon: MapPin, type: "text", placeholder: "City, Country" },
+  { key: "github_url", label: "GitHub", icon: Github, type: "url", placeholder: "https://github.com/…" },
+  { key: "linkedin_url", label: "LinkedIn", icon: Linkedin, type: "url", placeholder: "https://linkedin.com/in/…" },
+  { key: "twitter_url", label: "Twitter", icon: Twitter, type: "url", placeholder: "https://twitter.com/…" },
+  { key: "website_url", label: "Website", icon: Globe, type: "url", placeholder: "https://…" },
+] as const;
 
 const AdminContact = () => {
   const { data, isLoading } = useContactInfo();
@@ -49,34 +59,38 @@ const AdminContact = () => {
     toast.success("Contact info saved.");
   };
 
-  if (isLoading) return <Loader2 className="w-5 h-5 animate-spin" />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Contact</h1>
-        <p className="text-sm text-muted-foreground mt-1">Email, location, and social links.</p>
-      </div>
+    <div className="space-y-5">
+      <PageHeader title="Contact" description="Email, location, and social links." />
 
-      <div className="space-y-5 rounded-lg bg-card p-6 card-glow">
-        {([
-          ["email", "Email"],
-          ["location", "Location"],
-          ["github_url", "GitHub URL"],
-          ["linkedin_url", "LinkedIn URL"],
-          ["twitter_url", "Twitter URL"],
-          ["website_url", "Website URL"],
-        ] as const).map(([key, label]) => (
+      <div className="space-y-4 rounded-xl bg-card p-4 sm:p-6 border border-border/50">
+        {fields.map(({ key, label, icon: Icon, type, placeholder }) => (
           <div key={key} className="space-y-2">
-            <Label htmlFor={key}>{label}</Label>
+            <Label htmlFor={key} className="flex items-center gap-2">
+              <Icon className="w-3.5 h-3.5 text-muted-foreground" />
+              {label}
+            </Label>
             <Input
               id={key}
+              type={type}
+              placeholder={placeholder}
               value={(form[key] as string) ?? ""}
               onChange={(e) => setForm({ ...form, [key]: e.target.value })}
             />
           </div>
         ))}
-        <Button onClick={handleSave} disabled={saving} className="gap-2">
+      </div>
+
+      <div className="sticky bottom-16 md:static md:bottom-auto z-30 -mx-4 sm:mx-0 px-4 sm:px-0 py-3 sm:py-0 bg-background/95 backdrop-blur sm:bg-transparent sm:backdrop-blur-none border-t border-border sm:border-0">
+        <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto gap-2">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes
         </Button>

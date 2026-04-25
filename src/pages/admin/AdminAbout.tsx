@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
+import PageHeader from "@/components/admin/PageHeader";
 import { toast } from "sonner";
 import { Loader2, Save } from "lucide-react";
 
@@ -50,16 +51,19 @@ const AdminAbout = () => {
     toast.success("Profile saved.");
   };
 
-  if (isLoading) return <Loader2 className="w-5 h-5 animate-spin" />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">About</h1>
-        <p className="text-sm text-muted-foreground mt-1">Edit your hero section content and avatar.</p>
-      </div>
+    <div className="space-y-5">
+      <PageHeader title="About" description="Edit your hero section content and avatar." />
 
-      <div className="space-y-5 rounded-lg bg-card p-6 card-glow">
+      <div className="space-y-5 rounded-xl bg-card p-4 sm:p-6 border border-border/50">
         <ImageUpload label="Avatar" value={form.avatar_url} onChange={(url) => setForm({ ...form, avatar_url: url })} folder="avatars" />
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
@@ -76,8 +80,13 @@ const AdminAbout = () => {
         <div className="space-y-2">
           <Label htmlFor="bio">Bio</Label>
           <Textarea id="bio" rows={4} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} maxLength={500} />
+          <p className="text-xs text-muted-foreground text-right">{form.bio.length}/500</p>
         </div>
-        <Button onClick={handleSave} disabled={saving} className="gap-2">
+      </div>
+
+      {/* Sticky save bar on mobile */}
+      <div className="sticky bottom-16 md:static md:bottom-auto z-30 -mx-4 sm:mx-0 px-4 sm:px-0 py-3 sm:py-0 bg-background/95 backdrop-blur sm:bg-transparent sm:backdrop-blur-none border-t border-border sm:border-0">
+        <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto gap-2">
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save Changes
         </Button>

@@ -7,8 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import PageHeader from "@/components/admin/PageHeader";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { toast } from "sonner";
-import { Loader2, Plus, Trash2, Save } from "lucide-react";
+import { Loader2, Plus, Trash2, Save, ChevronDown, Sparkles } from "lucide-react";
 
 type Entry = {
   id: string;
@@ -27,6 +42,7 @@ const AdminCareer = () => {
   const qc = useQueryClient();
   const [draft, setDraft] = useState(empty);
   const [adding, setAdding] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const refresh = () => qc.invalidateQueries({ queryKey: ["career_timeline"] });
 
@@ -38,6 +54,7 @@ const AdminCareer = () => {
     setAdding(false);
     if (error) return toast.error(error.message);
     setDraft(empty);
+    setOpen(false);
     refresh();
     toast.success("Entry added.");
   };
@@ -65,40 +82,78 @@ const AdminCareer = () => {
     const { error } = await supabase.from("career_timeline").delete().eq("id", id);
     if (error) return toast.error(error.message);
     refresh();
+    toast.success("Removed.");
   };
 
-  if (isLoading) return <Loader2 className="w-5 h-5 animate-spin" />;
-
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Career Journey</h1>
-        <p className="text-sm text-muted-foreground mt-1">Manage timeline entries.</p>
-      </div>
+    <div className="space-y-5">
+      <PageHeader
+        title="Career Journey"
+        description="Manage timeline entries."
+        action={
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger asChild>
+              <Button size="sm" className="gap-1.5 shrink-0">
+                <Plus className="w-4 h-4" />
+                <span className="hidden sm:inline">Add</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-lg max-h-[90dvh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>New Entry</DialogTitle>
+                <DialogDescription>Add a milestone to your career timeline.</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 pt-2">
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="space-y-2 col-span-1">
+                    <Label htmlFor="year">Year</Label>
+                    <Input id="year" placeholder="2026" value={draft.year} onChange={(e) => setDraft({ ...draft, year: e.target.value })} maxLength={20} />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <Label htmlFor="role">Role</Label>
+                    <Input id="role" placeholder="Backend Developer" value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} maxLength={100} />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="company">Company</Label>
+                  <Input id="company" value={draft.company} onChange={(e) => setDraft({ ...draft, company: e.target.value })} maxLength={100} />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="desc">Description</Label>
+                  <Textarea id="desc" rows={3} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} maxLength={500} />
+                </div>
+                <label className="flex items-center justify-between gap-3 p-3 rounded-md bg-secondary/50">
+                  <span className="text-sm flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    Highlight entry
+                  </span>
+                  <Switch checked={draft.is_highlight} onCheckedChange={(v) => setDraft({ ...draft, is_highlight: v })} />
+                </label>
+                <Button onClick={handleAdd} disabled={adding} className="w-full gap-2">
+                  {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                  Add Entry
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        }
+      />
 
-      <div className="rounded-lg bg-card p-6 card-glow space-y-4">
-        <p className="text-sm font-medium">Add new entry</p>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <Input placeholder="Year (e.g. 2026)" value={draft.year} onChange={(e) => setDraft({ ...draft, year: e.target.value })} maxLength={20} />
-          <Input placeholder="Role" value={draft.role} onChange={(e) => setDraft({ ...draft, role: e.target.value })} maxLength={100} />
-          <Input placeholder="Company" value={draft.company} onChange={(e) => setDraft({ ...draft, company: e.target.value })} maxLength={100} className="sm:col-span-2" />
-          <Textarea placeholder="Description" rows={3} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} maxLength={500} className="sm:col-span-2" />
-          <label className="flex items-center gap-2 text-sm sm:col-span-2">
-            <Switch checked={draft.is_highlight} onCheckedChange={(v) => setDraft({ ...draft, is_highlight: v })} />
-            Highlight entry
-          </label>
+      {isLoading ? (
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
         </div>
-        <Button onClick={handleAdd} disabled={adding} className="gap-2">
-          {adding ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-          Add Entry
-        </Button>
-      </div>
-
-      <div className="space-y-3">
-        {data?.map((entry) => (
-          <CareerEntryCard key={entry.id} entry={entry as Entry} onSave={handleSave} onDelete={handleDelete} />
-        ))}
-      </div>
+      ) : data?.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-border p-10 text-center">
+          <p className="text-sm text-muted-foreground">No entries yet. Tap “Add” to create one.</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {data?.map((entry) => (
+            <CareerEntryCard key={entry.id} entry={entry as Entry} onSave={handleSave} onDelete={handleDelete} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -106,51 +161,69 @@ const AdminCareer = () => {
 const CareerEntryCard = ({ entry, onSave, onDelete }: { entry: Entry; onSave: (e: Entry) => Promise<void>; onDelete: (id: string) => void }) => {
   const [local, setLocal] = useState(entry);
   const [busy, setBusy] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <div className="rounded-lg bg-card p-5 space-y-3">
-      <div className="grid sm:grid-cols-2 gap-3">
-        <div className="space-y-1">
-          <Label>Year</Label>
-          <Input value={local.year} onChange={(e) => setLocal({ ...local, year: e.target.value })} maxLength={20} />
+    <Collapsible open={open} onOpenChange={setOpen} className="rounded-xl bg-card border border-border/50 overflow-hidden">
+      <CollapsibleTrigger className="w-full flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors">
+        <div className="flex flex-col items-center justify-center min-w-12 px-2 py-1 rounded-md bg-primary/10 text-primary">
+          <span className="font-mono text-sm font-bold leading-tight">{entry.year || "—"}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold truncate">{entry.role || "Untitled role"}</p>
+            {entry.is_highlight && <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />}
+          </div>
+          <p className="text-xs text-muted-foreground truncate">{entry.company || "—"}</p>
+        </div>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="px-4 pb-4 pt-1 space-y-3 border-t border-border/50">
+        <div className="grid grid-cols-3 gap-3 pt-3">
+          <div className="space-y-1 col-span-1">
+            <Label className="text-xs">Year</Label>
+            <Input value={local.year} onChange={(e) => setLocal({ ...local, year: e.target.value })} maxLength={20} />
+          </div>
+          <div className="space-y-1 col-span-2">
+            <Label className="text-xs">Role</Label>
+            <Input value={local.role} onChange={(e) => setLocal({ ...local, role: e.target.value })} maxLength={100} />
+          </div>
         </div>
         <div className="space-y-1">
-          <Label>Role</Label>
-          <Input value={local.role} onChange={(e) => setLocal({ ...local, role: e.target.value })} maxLength={100} />
-        </div>
-        <div className="space-y-1 sm:col-span-2">
-          <Label>Company</Label>
+          <Label className="text-xs">Company</Label>
           <Input value={local.company} onChange={(e) => setLocal({ ...local, company: e.target.value })} maxLength={100} />
         </div>
-        <div className="space-y-1 sm:col-span-2">
-          <Label>Description</Label>
+        <div className="space-y-1">
+          <Label className="text-xs">Description</Label>
           <Textarea rows={3} value={local.description} onChange={(e) => setLocal({ ...local, description: e.target.value })} maxLength={500} />
         </div>
-        <label className="flex items-center gap-2 text-sm sm:col-span-2">
+        <label className="flex items-center justify-between gap-3 p-3 rounded-md bg-secondary/50">
+          <span className="text-sm flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" />
+            Highlight entry
+          </span>
           <Switch checked={local.is_highlight} onCheckedChange={(v) => setLocal({ ...local, is_highlight: v })} />
-          Highlight entry
         </label>
-      </div>
-      <div className="flex gap-2">
-        <Button
-          size="sm"
-          onClick={async () => {
-            setBusy(true);
-            await onSave(local);
-            setBusy(false);
-          }}
-          disabled={busy}
-          className="gap-2"
-        >
-          {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-          Save
-        </Button>
-        <Button size="sm" variant="ghost" onClick={() => onDelete(entry.id)} className="text-destructive gap-2">
-          <Trash2 className="w-3.5 h-3.5" />
-          Delete
-        </Button>
-      </div>
-    </div>
+        <div className="flex gap-2 pt-1">
+          <Button
+            size="sm"
+            onClick={async () => {
+              setBusy(true);
+              await onSave(local);
+              setBusy(false);
+            }}
+            disabled={busy}
+            className="flex-1 gap-2"
+          >
+            {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+            Save
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => onDelete(entry.id)} className="text-destructive gap-2">
+            <Trash2 className="w-3.5 h-3.5" />
+          </Button>
+        </div>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
 

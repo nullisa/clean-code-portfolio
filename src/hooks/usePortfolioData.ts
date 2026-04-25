@@ -45,7 +45,7 @@ export const useProjects = () =>
   useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("*").order("sort_order");
+      const { data, error } = await supabase.from("projects").select("*").order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
     },

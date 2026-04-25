@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import PageHeader from "@/components/admin/PageHeader";
+import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
 import {
   Dialog,
   DialogContent,
@@ -218,9 +219,11 @@ const CareerEntryCard = ({ entry, onSave, onDelete }: { entry: Entry; onSave: (e
             {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             Save
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => onDelete(entry.id)} className="text-destructive gap-2">
-            <Trash2 className="w-3.5 h-3.5" />
-          </Button>
+          <ConfirmDeleteButton
+            onConfirm={() => onDelete(entry.id)}
+            itemLabel={`the “${entry.year || ""} ${entry.role || "entry"}” milestone`}
+            title="Delete entry?"
+          />
         </div>
       </CollapsibleContent>
     </Collapsible>

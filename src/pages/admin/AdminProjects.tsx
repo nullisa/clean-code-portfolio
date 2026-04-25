@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
 import PageHeader from "@/components/admin/PageHeader";
+import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
 import {
   Dialog,
   DialogContent,
@@ -227,9 +228,11 @@ const ProjectCard = ({ project, onSave, onDelete }: { project: Project; onSave: 
             {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
             Save
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => onDelete(project.id)} className="text-destructive gap-2">
-            <Trash2 className="w-3.5 h-3.5" />
-          </Button>
+          <ConfirmDeleteButton
+            onConfirm={() => onDelete(project.id)}
+            itemLabel={`the project “${project.title || "Untitled"}”`}
+            title="Delete project?"
+          />
         </div>
       </CollapsibleContent>
     </Collapsible>

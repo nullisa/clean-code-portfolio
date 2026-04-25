@@ -132,7 +132,9 @@ const AdminTech = () => {
                       className="w-24 sm:w-32 h-9 border-0 bg-transparent focus-visible:bg-secondary/40 px-2 text-xs text-muted-foreground"
                     />
                     <ConfirmDeleteButton
-                      onConfirm={() => handleDelete(tech.id)}
+                      onConfirm={() => {
+                        void handleDelete(tech.id);
+                      }}
                       itemLabel={`“${tech.name}”`}
                       title="Remove technology?"
                       size="icon"

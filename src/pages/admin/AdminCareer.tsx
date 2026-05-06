@@ -164,9 +164,35 @@ const AdminCareer = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          {data?.map((entry) => (
-            <CareerEntryCard key={entry.id} entry={entry as Entry} onSave={handleSave} onDelete={handleDelete} />
+          {data?.map((entry, idx) => (
+            <CareerEntryCard
+              key={entry.id}
+              entry={entry as Entry}
+              onSave={handleSave}
+              onDelete={handleDelete}
+              onMoveUp={() => handleMove(idx, -1)}
+              onMoveDown={() => handleMove(idx, 1)}
+              isFirst={idx === 0}
+              isLast={idx === (data!.length - 1)}
+            />
           ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const CareerEntryCard = ({
+  entry, onSave, onDelete, onMoveUp, onMoveDown, isFirst, isLast,
+}: {
+  entry: Entry;
+  onSave: (e: Entry) => Promise<void>;
+  onDelete: (id: string) => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+}) => {
         </div>
       )}
     </div>

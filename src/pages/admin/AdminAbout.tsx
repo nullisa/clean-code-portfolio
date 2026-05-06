@@ -27,6 +27,7 @@ const AdminAbout = () => {
         tagline: data.tagline ?? "",
         bio: data.bio ?? "",
         avatar_url: data.avatar_url,
+        cv_url: (data as any).cv_url ?? null,
       });
     }
   }, [data]);

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
+import CvUpload from "@/components/admin/CvUpload";
 import PageHeader from "@/components/admin/PageHeader";
 import { toast } from "sonner";
 import { Loader2, Save } from "lucide-react";
@@ -14,7 +15,7 @@ import { Loader2, Save } from "lucide-react";
 const AdminAbout = () => {
   const { data, isLoading } = useProfile();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ id: "", name: "", role: "", tagline: "", bio: "", avatar_url: "" as string | null });
+  const [form, setForm] = useState({ id: "", name: "", role: "", tagline: "", bio: "", avatar_url: "" as string | null, cv_url: "" as string | null });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const AdminAbout = () => {
         tagline: data.tagline ?? "",
         bio: data.bio ?? "",
         avatar_url: data.avatar_url,
+        cv_url: (data as any).cv_url ?? null,
       });
     }
   }, [data]);
@@ -40,7 +42,8 @@ const AdminAbout = () => {
         tagline: form.tagline,
         bio: form.bio,
         avatar_url: form.avatar_url,
-      })
+        cv_url: form.cv_url,
+      } as any)
       .eq("id", form.id);
     setSaving(false);
     if (error) {
@@ -65,6 +68,7 @@ const AdminAbout = () => {
 
       <div className="space-y-5 rounded-xl bg-card p-4 sm:p-6 border border-border/50">
         <ImageUpload label="Avatar" value={form.avatar_url} onChange={(url) => setForm({ ...form, avatar_url: url })} folder="avatars" />
+        <CvUpload value={form.cv_url} onChange={(url) => setForm({ ...form, cv_url: url })} />
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} maxLength={100} />

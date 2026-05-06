@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
+import CvUpload from "@/components/admin/CvUpload";
 import PageHeader from "@/components/admin/PageHeader";
 import { toast } from "sonner";
 import { Loader2, Save } from "lucide-react";

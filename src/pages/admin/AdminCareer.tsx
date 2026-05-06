@@ -193,13 +193,6 @@ const CareerEntryCard = ({
   isFirst: boolean;
   isLast: boolean;
 }) => {
-        </div>
-      )}
-    </div>
-  );
-};
-
-const CareerEntryCard = ({ entry, onSave, onDelete }: { entry: Entry; onSave: (e: Entry) => Promise<void>; onDelete: (id: string) => void }) => {
   const [local, setLocal] = useState(entry);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);

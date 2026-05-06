@@ -42,7 +42,8 @@ const AdminAbout = () => {
         tagline: form.tagline,
         bio: form.bio,
         avatar_url: form.avatar_url,
-      })
+        cv_url: form.cv_url,
+      } as any)
       .eq("id", form.id);
     setSaving(false);
     if (error) {

@@ -68,6 +68,7 @@ const AdminAbout = () => {
 
       <div className="space-y-5 rounded-xl bg-card p-4 sm:p-6 border border-border/50">
         <ImageUpload label="Avatar" value={form.avatar_url} onChange={(url) => setForm({ ...form, avatar_url: url })} folder="avatars" />
+        <CvUpload value={form.cv_url} onChange={(url) => setForm({ ...form, cv_url: url })} />
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} maxLength={100} />

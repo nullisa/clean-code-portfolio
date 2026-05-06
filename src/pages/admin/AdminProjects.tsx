@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
 import PageHeader from "@/components/admin/PageHeader";
 import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
+import ReorderButtons from "@/components/admin/ReorderButtons";
 import {
   Dialog,
   DialogContent,

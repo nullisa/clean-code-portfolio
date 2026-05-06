@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import PageHeader from "@/components/admin/PageHeader";
 import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
+import ReorderButtons from "@/components/admin/ReorderButtons";
 import {
   Dialog,
   DialogContent,
@@ -86,6 +87,19 @@ const AdminCareer = () => {
     toast.success("Removed.");
   };
 
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    if (!data) return;
+    const target = index + direction;
+    if (target < 0 || target >= data.length) return;
+    const a = data[index];
+    const b = data[target];
+    const { error: e1 } = await supabase.from("career_timeline").update({ sort_order: b.sort_order }).eq("id", a.id);
+    const { error: e2 } = await supabase.from("career_timeline").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e1 || e2) return toast.error((e1 || e2)!.message);
+    refresh();
+  };
+
+
   return (
     <div className="space-y-5">
       <PageHeader
@@ -150,8 +164,17 @@ const AdminCareer = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          {data?.map((entry) => (
-            <CareerEntryCard key={entry.id} entry={entry as Entry} onSave={handleSave} onDelete={handleDelete} />
+          {data?.map((entry, idx) => (
+            <CareerEntryCard
+              key={entry.id}
+              entry={entry as Entry}
+              onSave={handleSave}
+              onDelete={handleDelete}
+              onMoveUp={() => handleMove(idx, -1)}
+              onMoveDown={() => handleMove(idx, 1)}
+              isFirst={idx === 0}
+              isLast={idx === (data!.length - 1)}
+            />
           ))}
         </div>
       )}
@@ -159,26 +182,39 @@ const AdminCareer = () => {
   );
 };
 
-const CareerEntryCard = ({ entry, onSave, onDelete }: { entry: Entry; onSave: (e: Entry) => Promise<void>; onDelete: (id: string) => void }) => {
+const CareerEntryCard = ({
+  entry, onSave, onDelete, onMoveUp, onMoveDown, isFirst, isLast,
+}: {
+  entry: Entry;
+  onSave: (e: Entry) => Promise<void>;
+  onDelete: (id: string) => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+}) => {
   const [local, setLocal] = useState(entry);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="rounded-xl bg-card border border-border/50 overflow-hidden">
-      <CollapsibleTrigger className="w-full flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors">
-        <div className="flex flex-col items-center justify-center min-w-12 px-2 py-1 rounded-md bg-primary/10 text-primary">
-          <span className="font-mono text-sm font-bold leading-tight">{entry.year || "—"}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold truncate">{entry.role || "Untitled role"}</p>
-            {entry.is_highlight && <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />}
+      <div className="flex items-center pr-2">
+        <CollapsibleTrigger className="flex-1 flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors">
+          <div className="flex flex-col items-center justify-center min-w-12 px-2 py-1 rounded-md bg-primary/10 text-primary">
+            <span className="font-mono text-sm font-bold leading-tight">{entry.year || "—"}</span>
           </div>
-          <p className="text-xs text-muted-foreground truncate">{entry.company || "—"}</p>
-        </div>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
-      </CollapsibleTrigger>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold truncate">{entry.role || "Untitled role"}</p>
+              {entry.is_highlight && <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />}
+            </div>
+            <p className="text-xs text-muted-foreground truncate">{entry.company || "—"}</p>
+          </div>
+          <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        </CollapsibleTrigger>
+        <ReorderButtons onMoveUp={onMoveUp} onMoveDown={onMoveDown} isFirst={isFirst} isLast={isLast} />
+      </div>
       <CollapsibleContent className="px-4 pb-4 pt-1 space-y-3 border-t border-border/50">
         <div className="grid grid-cols-3 gap-3 pt-3">
           <div className="space-y-1 col-span-1">

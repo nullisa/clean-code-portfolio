@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import ImageUpload from "@/components/admin/ImageUpload";
 import PageHeader from "@/components/admin/PageHeader";
 import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
+import ReorderButtons from "@/components/admin/ReorderButtons";
 import {
   Dialog,
   DialogContent,
@@ -94,6 +95,18 @@ const AdminProjects = () => {
     toast.success("Removed.");
   };
 
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    if (!data) return;
+    const target = index + direction;
+    if (target < 0 || target >= data.length) return;
+    const a = data[index];
+    const b = data[target];
+    const { error: e1 } = await supabase.from("projects").update({ sort_order: b.sort_order }).eq("id", a.id);
+    const { error: e2 } = await supabase.from("projects").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e1 || e2) return toast.error((e1 || e2)!.message);
+    refresh();
+  };
+
   return (
     <div className="space-y-5">
       <PageHeader
@@ -158,8 +171,17 @@ const AdminProjects = () => {
         </div>
       ) : (
         <div className="space-y-3">
-          {data?.map((p) => (
-            <ProjectCard key={p.id} project={p as Project} onSave={handleSave} onDelete={handleDelete} />
+          {data?.map((p, idx) => (
+            <ProjectCard
+              key={p.id}
+              project={p as Project}
+              onSave={handleSave}
+              onDelete={handleDelete}
+              onMoveUp={() => handleMove(idx, -1)}
+              onMoveDown={() => handleMove(idx, 1)}
+              isFirst={idx === 0}
+              isLast={idx === (data!.length - 1)}
+            />
           ))}
         </div>
       )}
@@ -167,27 +189,40 @@ const AdminProjects = () => {
   );
 };
 
-const ProjectCard = ({ project, onSave, onDelete }: { project: Project; onSave: (p: Project) => Promise<void>; onDelete: (id: string) => void }) => {
+const ProjectCard = ({
+  project, onSave, onDelete, onMoveUp, onMoveDown, isFirst, isLast,
+}: {
+  project: Project;
+  onSave: (p: Project) => Promise<void>;
+  onDelete: (id: string) => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+  isFirst: boolean;
+  isLast: boolean;
+}) => {
   const [local, setLocal] = useState(project);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="rounded-xl bg-card border border-border/50 overflow-hidden">
-      <CollapsibleTrigger className="w-full flex items-center gap-3 p-3 text-left hover:bg-secondary/30 transition-colors">
-        {project.image_url ? (
-          <img src={project.image_url} alt="" className="w-12 h-12 rounded-md object-cover border border-border/50 shrink-0" />
-        ) : (
-          <div className="w-12 h-12 rounded-md bg-secondary flex items-center justify-center shrink-0">
-            <FolderGit2 className="w-5 h-5 text-muted-foreground" />
+      <div className="flex items-center pr-2">
+        <CollapsibleTrigger className="flex-1 flex items-center gap-3 p-3 text-left hover:bg-secondary/30 transition-colors">
+          {project.image_url ? (
+            <img src={project.image_url} alt="" className="w-12 h-12 rounded-md object-cover border border-border/50 shrink-0" />
+          ) : (
+            <div className="w-12 h-12 rounded-md bg-secondary flex items-center justify-center shrink-0">
+              <FolderGit2 className="w-5 h-5 text-muted-foreground" />
+            </div>
+          )}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold truncate">{project.title || "Untitled"}</p>
+            <p className="text-xs text-muted-foreground truncate">{project.tech || "—"}</p>
           </div>
-        )}
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold truncate">{project.title || "Untitled"}</p>
-          <p className="text-xs text-muted-foreground truncate">{project.tech || "—"}</p>
-        </div>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
-      </CollapsibleTrigger>
+          <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        </CollapsibleTrigger>
+        <ReorderButtons onMoveUp={onMoveUp} onMoveDown={onMoveDown} isFirst={isFirst} isLast={isLast} />
+      </div>
       <CollapsibleContent className="px-4 pb-4 pt-1 space-y-3 border-t border-border/50">
         <div className="space-y-1 pt-3">
           <Label className="text-xs">Title</Label>

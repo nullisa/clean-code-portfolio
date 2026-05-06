@@ -199,19 +199,22 @@ const CareerEntryCard = ({
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="rounded-xl bg-card border border-border/50 overflow-hidden">
-      <CollapsibleTrigger className="w-full flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors">
-        <div className="flex flex-col items-center justify-center min-w-12 px-2 py-1 rounded-md bg-primary/10 text-primary">
-          <span className="font-mono text-sm font-bold leading-tight">{entry.year || "—"}</span>
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <p className="text-sm font-semibold truncate">{entry.role || "Untitled role"}</p>
-            {entry.is_highlight && <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />}
+      <div className="flex items-center pr-2">
+        <CollapsibleTrigger className="flex-1 flex items-center gap-3 p-4 text-left hover:bg-secondary/30 transition-colors">
+          <div className="flex flex-col items-center justify-center min-w-12 px-2 py-1 rounded-md bg-primary/10 text-primary">
+            <span className="font-mono text-sm font-bold leading-tight">{entry.year || "—"}</span>
           </div>
-          <p className="text-xs text-muted-foreground truncate">{entry.company || "—"}</p>
-        </div>
-        <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
-      </CollapsibleTrigger>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-semibold truncate">{entry.role || "Untitled role"}</p>
+              {entry.is_highlight && <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />}
+            </div>
+            <p className="text-xs text-muted-foreground truncate">{entry.company || "—"}</p>
+          </div>
+          <ChevronDown className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
+        </CollapsibleTrigger>
+        <ReorderButtons onMoveUp={onMoveUp} onMoveDown={onMoveDown} isFirst={isFirst} isLast={isLast} />
+      </div>
       <CollapsibleContent className="px-4 pb-4 pt-1 space-y-3 border-t border-border/50">
         <div className="grid grid-cols-3 gap-3 pt-3">
           <div className="space-y-1 col-span-1">

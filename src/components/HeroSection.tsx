@@ -74,9 +74,18 @@ const HeroSection = () => {
               transition={{ duration: 0.5, delay: 0.4 }}
               className="flex flex-col sm:flex-row gap-3 justify-center md:justify-start"
             >
-              <Button size="lg" className="gap-2 font-medium">
-                <Download className="w-4 h-4" />
-                Download CV
+              <Button size="lg" className="gap-2 font-medium" disabled={!(profile as any)?.cv_url} asChild={!!(profile as any)?.cv_url}>
+                {(profile as any)?.cv_url ? (
+                  <a href={(profile as any).cv_url} target="_blank" rel="noreferrer" download>
+                    <Download className="w-4 h-4" />
+                    Download CV
+                  </a>
+                ) : (
+                  <span>
+                    <Download className="w-4 h-4" />
+                    Download CV
+                  </span>
+                )}
               </Button>
               <Button size="lg" variant="outline" className="gap-2 font-medium" asChild>
                 <a href="#contact">

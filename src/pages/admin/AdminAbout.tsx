@@ -15,7 +15,7 @@ import { Loader2, Save } from "lucide-react";
 const AdminAbout = () => {
   const { data, isLoading } = useProfile();
   const qc = useQueryClient();
-  const [form, setForm] = useState({ id: "", name: "", role: "", tagline: "", bio: "", avatar_url: "" as string | null });
+  const [form, setForm] = useState({ id: "", name: "", role: "", tagline: "", bio: "", avatar_url: "" as string | null, cv_url: "" as string | null });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {

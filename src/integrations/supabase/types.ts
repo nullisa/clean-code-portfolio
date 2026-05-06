@@ -91,6 +91,7 @@ export type Database = {
           avatar_url: string | null
           bio: string
           created_at: string
+          cv_url: string | null
           id: string
           name: string
           role: string
@@ -101,6 +102,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string
           created_at?: string
+          cv_url?: string | null
           id?: string
           name?: string
           role?: string
@@ -111,6 +113,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string
           created_at?: string
+          cv_url?: string | null
           id?: string
           name?: string
           role?: string

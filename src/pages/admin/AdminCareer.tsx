@@ -10,6 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import PageHeader from "@/components/admin/PageHeader";
 import ConfirmDeleteButton from "@/components/admin/ConfirmDeleteButton";
+import ReorderButtons from "@/components/admin/ReorderButtons";
 import {
   Dialog,
   DialogContent,

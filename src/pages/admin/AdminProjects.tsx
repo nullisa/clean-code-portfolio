@@ -95,6 +95,18 @@ const AdminProjects = () => {
     toast.success("Removed.");
   };
 
+  const handleMove = async (index: number, direction: -1 | 1) => {
+    if (!data) return;
+    const target = index + direction;
+    if (target < 0 || target >= data.length) return;
+    const a = data[index];
+    const b = data[target];
+    const { error: e1 } = await supabase.from("projects").update({ sort_order: b.sort_order }).eq("id", a.id);
+    const { error: e2 } = await supabase.from("projects").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e1 || e2) return toast.error((e1 || e2)!.message);
+    refresh();
+  };
+
   return (
     <div className="space-y-5">
       <PageHeader

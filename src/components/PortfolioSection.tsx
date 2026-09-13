@@ -14,6 +14,9 @@ import { useProjects } from "@/hooks/usePortfolioData";
 
 const PAGE_SIZE = 5;
 
+const toExternalUrl = (url: string) =>
+  /^https?:\/\//i.test(url.trim()) ? url.trim() : `https://${url.trim()}`;
+
 const PortfolioSection = () => {
   const { data: projects = [] } = useProjects();
   const [page, setPage] = useState(1);
@@ -88,7 +91,7 @@ const PortfolioSection = () => {
 
                   {project.demo && (
                     <Button size="sm" className="gap-2 text-xs" asChild>
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                      <a href={toExternalUrl(project.demo)} target="_blank" rel="noopener noreferrer">
                         <Globe className="w-3.5 h-3.5" />
                         Live Demo
                       </a>
